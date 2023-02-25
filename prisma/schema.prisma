@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name     String
+  email    String   @unique
+  password String
+  sets     Set[]
+  setLogs  SetLog[]
+}
+
+model Set {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name  String @unique
+  cards Card[]
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
+
+  setLog SetLog?
+}
+
+model Card {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  term        String @unique
+  explanation String
+
+  set   Set? @relation(fields: [setId], references: [id])
+  setId Int? @map("set_id")
+}
+
+model SetLog {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  set    Set?  @relation(fields: [setId], references: [id])
+  setId  Int?  @unique @map("set_id")
+  User   User? @relation(fields: [userId], references: [id])
+  userId Int?  @map("user_id")
+}
