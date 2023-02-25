@@ -10,6 +10,8 @@ import { errorHandler, notFound } from './app/middleware/error.middleware.js';
 import authRoutes from './app/auth/auth.routes.js';
 import cardRoutes from './app/card/card.routes.js';
 import { prisma } from './app/prisma.js';
+import profileRoutes from './app/profile/profile.routes.js';
+import setLogRoutes from './app/set/log/setLog.routes.js';
 import setRoutes from './app/set/set.routes.js';
 
 dotenv.config();
@@ -26,6 +28,8 @@ async function main() {
 	app.use('/api/auth', authRoutes);
 	app.use('/api/sets', setRoutes);
 	app.use('/api/cards', cardRoutes);
+	app.use('/api/sets/log', setLogRoutes);
+	app.use('/api/profile', profileRoutes);
 
 	app.use(errorHandler);
 	app.use(notFound);
